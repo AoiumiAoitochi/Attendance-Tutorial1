@@ -9,7 +9,7 @@ config.hosts << "22568baf7b2c4c418d4962f272f28e05.vfs.cloud9.ap-northeast-1.amaz
   # since you don't have to restart the web server when you make code changes.
   config.enable_reloading = true
 
-  # Do not eager load code on boot.
+  # Do not eager load code on boot.remote:
   config.eager_load = false
 
   # Show full error reports.
