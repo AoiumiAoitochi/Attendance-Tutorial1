@@ -8,10 +8,15 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       log_in user
       redirect_to user
-      # ログイン後にユーザー情報ページにリダイレクトします。
     else
       flash.now[:danger] = '認証に失敗しました。'
       render 'new', status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    log_out
+    flash[:success] = 'ログアウトしました。'
+    redirect_to root_url
   end
 end
