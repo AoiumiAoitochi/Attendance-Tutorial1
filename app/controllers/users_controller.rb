@@ -15,8 +15,12 @@ class UsersController < ApplicationController
       flash[:success] = '新規作成に成功しました。'
       redirect_to @user
     else
-      render :'new', sratus: :unprocessable_entity
+      render 'new', status: :unprocessable_entity
     end
+  end
+
+  def edit
+    @user = User.find(params[:id])
   end
 
   private
