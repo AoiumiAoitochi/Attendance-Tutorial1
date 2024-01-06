@@ -40,8 +40,11 @@ class User < ApplicationRecord
   end
 
   # ユーザーのログイン情報を破棄します。
+  #def forget
+    #update_attribute(:remember_digest, nil)
+  #end
   def forget
-    update_attribute(:remember_digest, nil)
+    update_attribute(:remember_token, nil)
   end
 end
    # authenticated? メソッドの追加
