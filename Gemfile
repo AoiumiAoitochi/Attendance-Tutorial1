@@ -20,6 +20,7 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'jquery-rails'
 gem 'will_paginate', '~> 3.3' # この行を追加してください。
 gem 'bootstrap-will_paginate', '1.0.0' # この行を追加してください。
+gem 'rails-i18n'
 
 
 group :development, :test do
