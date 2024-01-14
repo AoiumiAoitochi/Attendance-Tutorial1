@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="edit-basic-info"
+
 export default class extends Controller {
   // フォームが送信されたときに呼ばれるメソッド
   submit(event) {
