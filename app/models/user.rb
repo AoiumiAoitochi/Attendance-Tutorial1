@@ -37,7 +37,6 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, User.digest(remember_token))
   end
 
-
   # トークンがダイジェストと一致すればtrueを返します。
   def authenticated?(remember_token)
     # ダイジェストが存在しない場合はfalseを返して終了します。
