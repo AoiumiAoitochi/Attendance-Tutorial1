@@ -78,8 +78,15 @@ class UsersController < ApplicationController
       format.turbo_stream
     end
   end
+  
 
   private
+  
+  #これがないことによりエラーが出る為テキストにはないが記述している。
+  def basic_info_params
+    params.require(:user).permit(:department, :basic_time, :work_time)
+  end
+
 
   def user_params
     params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
