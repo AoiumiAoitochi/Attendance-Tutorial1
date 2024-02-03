@@ -82,7 +82,7 @@ class UsersController < ApplicationController
 
   private
   
-  #これがないことによりエラーが出る為テキストにはないが記述している。
+  #これがないことによりエラーが出る為テキストにはないが記述している
   def basic_info_params
     params.require(:user).permit(:department, :basic_time, :work_time)
   end
