@@ -1,49 +1,31 @@
-require 'rails_helper'
-
-RSpec.describe "Users", type: :request do
- describe 'GET index' do
-    let(:user) { create(:user) }
+describe 'DELETE #destroy' do
+      let(:admin_user) { create(:user, admin: true) }
+      let(:target_user) { create(:user) }
+    
+      before do
+        admin_user
+        target_user
+        post login_path, params: { session: { email: admin_user.email, password: admin_user.password } }
+      end
+    
+      it 'ユーザーがデータベースから削除される' do
+        expect {
+          delete user_path(target_user)
+        }.to change(User, :count).by(-1)
+      end
   
-      context 'ユーザーが5件存在する場合' do
-        let!(:users) { create_list(:user, 4) + [user] }
+      it '302 Found ステータスコードを返す' do
+        delete user_path(target_user)
+        expect(response).to have_http_status(:found)
+      end
   
-        before do
-          post login_path, params: { session: { email: user.email, password: user.password } }
-          get users_path, as: :json
-        end
-
-
-      it "200 httpレスポンスを返す" do
-        expect(response.status).to eq 200
+      it 'フラッシュメッセージで「「ユーザー名」のデータを削除しました」と返す' do
+        delete user_path(target_user)
+        expect(flash[:success]).to eq("#{target_user.name}のデータを削除しました。")
       end
-
-
-      it "ユーザーが5件を返す" do
-        json_response = JSON.parse(response.body)
-        expect(json_response.length).to eq(5)
+    
+      it 'ユーザー一覧ページにリダイレクトされる' do
+        delete user_path(target_user)
+        expect(response).to redirect_to(users_url)
       end
-
-
-      it "5件のユーザーを正確に返す" do
-        json_response = JSON.parse(response.body)
-        expected_users = users.map do |user|
-          {
-            'id' => user.id,
-            'name' => user.name,
-            'email' => user.email,
-            'created_at' => user.created_at.as_json,
-            'updated_at' => user.updated_at.as_json,
-            'password_digest' => user.password_digest,
-            'remember_digest' => user.remember_digest,
-            'admin' => user.admin,
-            'department' => user.department,
-            'basic_time' => user.basic_time.as_json,
-            'work_time' => user.work_time.as_json
-          }
-        end
-        expect(json_response).to match_array(expected_users)
-      end
-   
     end
-  end
-end

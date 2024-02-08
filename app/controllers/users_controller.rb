@@ -18,22 +18,37 @@ class UsersController < ApplicationController
 
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
+    respond_to do |format|
+     format.html
+     format.json { render json: @user }
+    end
   end
+
 
 
   def new
     @user = User.new
+   
+    respond_to do |format|
+     format.html
+     format.json { render json: @user }
+   end
   end
+    
 
 
   def create
     @user = User.new(user_params)
-    if @user.save
-      log_in @user
-      flash[:success] = '新規作成に成功しました。'
-      redirect_to @user
-    else
-      render :new
+    respond_to do |format|
+      if @user.save
+        log_in @user
+        flash[:success] = '新規作成に成功しました。'
+        format.html { redirect_to @user }
+        format.json { render json: @user, status: :created, location: @user }
+      else
+        format.html { render :new }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -43,11 +58,15 @@ class UsersController < ApplicationController
 
 
   def update
-    if @user.update(user_params)
-      flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
-    else
-      render :edit      
+    respond_to do |format|
+      if @user.update(user_params)
+        flash[:success] = "ユーザー情報を更新しました。"
+        format.html { redirect_to @user }
+        format.json { render json: @user, status: :ok }
+      else
+        format.html { render :edit }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -55,7 +74,11 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     flash[:success] = "#{@user.name}のデータを削除しました。"
-    redirect_to users_url
+  
+    respond_to do |format|
+      format.html { redirect_to users_url }
+      format.json { head :no_content }
+    end
   end
 
 
